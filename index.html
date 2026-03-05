@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dünya Su Kaynakları Haritası</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link href="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Widgets/widgets.css" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <style>
+    /* 2D/3D Geçiş Butonu Stilleri */
+    .map-toggle {
+      position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      display: flex;
+      background: white;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      overflow: hidden;
+      pointer-events: auto;
+    }
+
+    .toggle-btn {
+      padding: 10px 25px;
+      border: none;
+      background: white;
+      color: #0077be;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-size: 14px;
+    }
+
+    .toggle-btn.active {
+      background: #0077be;
+      color: white;
+    }
+
+    .toggle-btn:hover:not(.active) {
+      background: #f0f0f0;
+    }
+
+    /* 3D Harita Container */
+    #cesiumContainer {
+      width: 100%;
+      height: 100vh;
+      display: none;
+      position: absolute;
+      top: 0;
+      left: 0;
+    }
+
+    #map.hidden {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <!-- 2D/3D Geçiş Butonu -->
+  <div class="map-toggle">
+    <button class="toggle-btn active" id="btn2d" onclick="switchTo2D()">🗺️ 2D Harita</button>
+    <button class="toggle-btn" id="btn3d" onclick="switchTo3D()">🌍 3D Harita</button>
+  </div>
+
+  <!-- 2D Harita (Mevcut) -->
+  <div id="map"></div>
+  
+  <!-- 3D Harita (Yeni) -->
+  <div id="cesiumContainer"></div>
+
+  <!-- Bilgi Paneli (Her iki harita için ortak) -->
+  <aside id="info" style="display: none; position: fixed; right: 0; top: 0; bottom: 0; z-index: 100;">
+    <div class="info-header">
+      <div class="title">
+        <img id="flag" class="flag" alt="Bayrak" style="display: none;"/>
+        <h2 id="country-name">Dünya Su Kaynakları</h2>
+      </div>
+      <button class="close-btn" onclick="window.resetInfo ? window.resetInfo() : resetInfo()">✕</button>
+    </div>
+    <div id="stats">
+      <div><b>Nüfus:</b> <span id="pop">—</span></div>
+      <div><b>GSYİH:</b> <span id="gdp">—</span></div>
+      <div><b>Su Puanı:</b> <span id="score">—</span>/10</div>
+      <p id="water-text" class="muted">Bir ülkeye tıklayarak bilgi alın.</p>
+    </div>
+    <!-- 🌊 Ülkeye özel su haritası -->
+    <div class="water-map-container" style="width: 100%; margin: 10px 0;">
+      <canvas id="country-watermap-canvas" class="country-watermap" style="width: 100%; height: auto; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"></canvas>
+    </div>
+  </aside>
+
+  <script src="https://cesium.com/downloads/cesiumjs/releases/1.123/Build/Cesium/Cesium.js"></script>
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="waterMapDrawer.js"></script>
+  <script src="multi-source-loader.js"></script>
+  <script src="script.js"></script>
+  <script src="script3d.js"></script>
+</body>
+</html>

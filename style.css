@@ -1,0 +1,127 @@
+:root {
+  --bg:#f6f8fb; --border:#dbe1ea; --ink:#1f2a37; --muted:#6b7280;
+  --green:#10b981; --yellow:#f59e0b; --red:#ef4444;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;              /* yatay düzen */
+  flex-direction: row;        /* panel sağda olsun */
+  font: 14px/1.4 system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: var(--ink);
+}
+
+/* Harita solda */
+/* Harita (solda, panel kadar daraltılmış alan) */
+#map {
+  flex: 3;
+  height: 100vh;
+  position: relative;
+  width: calc(100% - 420px); /* panelin genişliği kadar harita alanını daralt */
+  z-index: 1; /* haritanın panelin altında kalmasını sağlar */
+}
+
+/* Bilgi Paneli (sağda sabit, haritanın üstünde görünür) */
+#info {
+  width: 420px;                        /* sabit genişlik */
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  padding: 16px;
+  overflow-y: auto;
+  height: 100vh;
+  position: fixed;                     /* sabitlenmiş */
+  right: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 9999;                       /* haritanın üstünde görünür */
+  box-shadow: -2px 0 6px rgba(0,0,0,0.1); /* isteğe bağlı: panel kenarına gölge */
+}
+
+
+/* Başlık ve içerik yapısı */
+.info-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.title {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.flag {
+  width: 34px;
+  height: 24px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+
+h2 {
+  font-size: 20px;
+  margin: 0;
+  color: #0f6ad6;
+}
+
+.muted { color: var(--muted); }
+
+.close-btn {
+  border: 0;
+  background: #eef2f7;
+  color: #475569;
+  padding: 6px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.close-btn:hover { background: #e3e9f3; }
+
+/* Küçük grafik kartları */
+.chart-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  margin-bottom: 12px;
+}
+
+/* 3D toggle */
+.toggle3d-btn {
+  background: linear-gradient(135deg, #3b82f6, #1e40af);
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-bottom: 10px;
+}
+.toggle3d-btn:hover {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+/* 3D container */
+#cesiumContainer {
+  display: none;
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+/* Mobil görünüm: panel alta geçsin */
+@media (max-width: 920px) {
+  body { flex-direction: column; }
+  #map { height: 55vh; }
+  #info {
+    max-width: none;
+    height: 45vh;
+    border-left: none;
+    border-top: 1px solid var(--border);
+  }
+}
